@@ -15,12 +15,12 @@ object CategoriesRepository {
             ),
             Category(
                 id = "2",
-                name = "Pizza",
+                name = "Fries",
                 imageUrl = imageRoot + "category_fries.png"
             ),
             Category(
                 id = "3",
-                name = "Healthy",
+                name = "Beverages",
                 imageUrl = imageRoot + "category_beverages.png"
             ),
             Category(

@@ -1,17 +1,14 @@
 package com.codeforge.entrega.data
 
 import com.codeforge.entrega.model.Product
-import com.codeforge.entrega.model.ProductList
 
 
 object ProductRepository {
     private const val imageRoot =
         "https://raw.githubusercontent.com/hitanshu-dhawan/McCompose/main/app/src/main/res/drawable-nodpi/";
 
-    fun getProductListData(): ProductList {
-        return ProductList(
-            categories = CategoriesRepository.getCategoriesData(),
-            products = listOf(
+    fun getProductListData(): List<Product> {
+        return listOf(
                 Product(
                     id = "1001",
                     imageUrl = imageRoot + "menu_item_big_mac.png",
@@ -94,24 +91,93 @@ object ProductRepository {
                     name = "Small French Fries",
                     imageUrl = imageRoot + "menu_item_small_french_fries.png",
                     price = getRandomPrice(),
-                    categoryId = "1"
+                    categoryId = "2"
                 ),
                 Product(
                     id = "2002",
                     name = "Medium French Fries",
                     imageUrl = imageRoot + "menu_item_medium_french_fries.png",
                     price = getRandomPrice(),
-                    categoryId = "1"
+                    categoryId = "2"
                 ),
                 Product(
                     id = "2003",
                     name = "Large French Fries",
                     imageUrl = imageRoot + "menu_item_large_french_fries.png",
                     price = getRandomPrice(),
-                    categoryId = "1"
-                )
-            ),
-        )
+                    categoryId = "2"
+                ),
+                Product(
+                    id = "3001",
+                    name = "Coca Cola",
+                    imageUrl = imageRoot + "menu_item_coca_cola.png",
+                    price = getRandomPrice(),
+                    categoryId = "3"
+                ),
+                Product(
+                    id = "3002",
+                    name = "Diet Coke",
+                    imageUrl = imageRoot + "menu_item_diet_coke.png",
+                    price = getRandomPrice(),
+                    categoryId = "3"
+                ),
+                Product(
+                    id = "3003",
+                    name = "Fanta Orange",
+                    imageUrl = imageRoot + "menu_item_fanta_orange.png",
+                    price = getRandomPrice(),
+                    categoryId = "3"
+                ),
+                Product(
+                    id = "4001",
+                    name = "Big MAC Combo Meal",
+                    imageUrl = imageRoot + "menu_item_big_mac_combo_meal.png",
+                    price = getRandomPrice(),
+                    categoryId = "4"
+                ),
+                Product(
+                    id = "4002",
+                    name = "Filet Fish Meal",
+                    imageUrl = imageRoot + "menu_item_filet_o_fish_meal.png",
+                    price = getRandomPrice(),
+                    categoryId = "4"
+                ),
+                Product(
+                    id = "4003",
+                    name = "Double Quarter Pounder",
+                    imageUrl = imageRoot + "menu_item_double_quarter_pounder_with_cheese_meal.png",
+                    price = getRandomPrice(),
+                    categoryId = "4"
+                ),
+                Product(
+                    id = "5001",
+                    name = "Hamburger Happy Meal",
+                    imageUrl = imageRoot + "menu_item_hamburger_happy_meal.png",
+                    price = getRandomPrice(),
+                    categoryId = "5"
+                ),
+                Product(
+                    id = "5002",
+                    name = "Chicken McNuggets Happy Meal",
+                    imageUrl = imageRoot + "menu_item_four_piece_chicken_mcnuggets_happy_meal.png",
+                    price = getRandomPrice(),
+                    categoryId = "5"
+                ),
+                Product(
+                    id = "6001",
+                    name = "Kiddie Cone",
+                    imageUrl = imageRoot + "menu_item_kiddie_cone.png",
+                    price = getRandomPrice(),
+                    categoryId = "6"
+                ),
+                Product(
+                    id = "6002",
+                    name = "Hot Caramel Sundae",
+                    imageUrl = imageRoot + "menu_item_hot_caramel_sundae.png",
+                    price = getRandomPrice(),
+                    categoryId = "6"
+                ),
+            )
     }
 
     private fun getRandomPrice(): Double = (1..9).random() + 0.99

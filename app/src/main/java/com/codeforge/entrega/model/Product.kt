@@ -7,8 +7,3 @@ data class Product(
     val imageUrl: String,
     val categoryId: String,
 )
-
-data class ProductList(
-    val categories: List<Category>,
-    val products: List<Product>
-)

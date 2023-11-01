@@ -1,4 +1,4 @@
-package com.codeforge.entrega.ui.components
+package com.codeforge.entrega.ui.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,7 +22,7 @@ import com.codeforge.entrega.model.Product
 
 
 @Composable
-fun ProductListItem(product: Product) {
+fun ProductListItem(product: Product, onClick: (id: String) -> Unit = { _ -> }) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -147,19 +147,19 @@ fun ProductListItem(product: Product) {
 //
 //}
 
-
 @Preview(
     name="Light Mode",
 //    uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Preview(showBackground = true)
 @Composable
-fun PreviewListItem(){
-    val product = ProductRepository.getProductListData().products.find { it.id == "2001" }!!
+fun PreviewProductListItem(){
+    val product = ProductRepository.getProductListData().find { it.id == "2001" }!!
 
     Column() {
         ProductListItem(
-            product = product
+            product = product,
+            onClick = {}
         )
     }
 }

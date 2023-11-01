@@ -72,6 +72,11 @@ dependencies {
     implementation "com.google.android.material:compose-theme-adapter:1.1.1"
     // When using a AppCompat theme
     implementation "com.google.accompanist:accompanist-appcompat-theme:0.16.0"
+    // Animations
+//    implementation 'androidx.compose.animation:animation:1.1.1'
+    // Material design icons
+    implementation 'androidx.compose.material:material-icons-core:1.1.1'
+    implementation 'androidx.compose.material:material-icons-extended:1.1.1'
 
     // Activities
     implementation 'androidx.activity:activity-compose:1.4.0'
