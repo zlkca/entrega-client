@@ -4,8 +4,7 @@ export default function PageContainer({ children }) {
     return (
         <Grid
             container
-            xs={12}
-            pt={3}
+            pt={12}
             display="flex"
             justifyContent="center"
             alignItems="center"
