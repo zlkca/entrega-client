@@ -4,11 +4,13 @@ import Button from "../common/Button";
 import QuantityInput from "../QuantityInput";
 
 import { DefaultProductPicture } from "../../const";
-import { getDiscount } from "../../pages/utils";
+import { getCartSubTotal, getDiscount } from "../../pages/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCart } from "../../redux/cart/cart.slice";
 import { selectCart } from "../../redux/cart/cart.selector";
 import { Divider } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
 const styles = {
     cartText:{
         color: '0f1111', fontSize:13, fontWeight:700, paddingTop:6,
@@ -49,26 +51,25 @@ function CartItem({ item, quantity }) {
 }
 
 export default function CartItemList({cart}) {
-    const getSubTotal = (cart) => {
-        let sub = 0
-        cart.map(it => sub += it.quantity * (it.product.price - getDiscount(it.product.discount, it.product.price)));
-        return sub;
-    }
+    const {t} = useTranslation();
     return (
         <Grid container>
             {
                 cart && cart.length > 0 &&
                 cart.map(it =>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} key={it.product._id}>
                         <CartItem item={it.product} quantity={it.quantity}/>
                     </Grid>
                 )
             }
             <Divider />
-            <Grid item xs={12} display="flex" style={{fontSize: 22, fontWeight:600}}>
-                <Box flexGrow={1} pl={2}>SUBTOTAL</Box>
-                <Box xs={4} pr={2}>${getSubTotal(cart)}</Box>
-            </Grid>
+            {
+                cart &&
+                <Grid item xs={12} display="flex" style={{fontSize: 22, fontWeight:600}}>
+                    <Box flexGrow={1} pl={2}>{t("Subtotal")}</Box>
+                    <Box xs={4} pr={2}>${getCartSubTotal(cart)}</Box>
+                </Grid>
+            }
         </Grid>
     )
 }

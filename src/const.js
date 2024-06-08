@@ -7,6 +7,6 @@ export const ACCOUNT_COOKIE = `${BrandName.toLowerCase()}-backoffice-account`;
 export const RootApiUrl =
   env == "prd"
     ? `https://${Cfg.apiClusterId}.execute-api.us-east-1.amazonaws.com/dev`
-    : `http://192.168.65.7:5001`;
+    : `http://192.168.65.6:5001`;
 
 export const DefaultProductPicture = "/logo192.png"

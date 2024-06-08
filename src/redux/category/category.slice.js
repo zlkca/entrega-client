@@ -31,7 +31,6 @@ export const {
     setCategoryMap,
     setCategories,
     setCategory,
-        
 } = categorySlice.actions;
 
 export default categorySlice.reducer;

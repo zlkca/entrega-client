@@ -1,7 +1,7 @@
 
 
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import { useTranslation } from "react-i18next";
@@ -26,6 +26,8 @@ import Button from "../../components/common/Button";
 import Input from "../../components/common/Input";
 import { BrandName } from "../../config";
 import GoogleLogo from "../../components/GoogleLogo";
+import { categoryAPI } from "../../services/categoryAPI";
+import { selectCart } from "../../redux/cart/cart.selector";
 
 export default function SignIn() {
   const { t } = useTranslation();
@@ -33,7 +35,7 @@ export default function SignIn() {
   const navigate = useNavigate();
   const [credential, setCredential] = useState({});
   const [error, setError] = useState();
-
+  const cart = useSelector(selectCart);
   const [user, setUser] = useState([]);
 
   const handleGoogleLogin = useGoogleLogin({
@@ -47,19 +49,17 @@ export default function SignIn() {
         Cookies.set(ACCOUNT_COOKIE, JSON.stringify(data.account));
         dispatch(setTokenId(data.token));
         dispatch(setSignedInUser(data.account));
-        navigate("/products")
+        if(cart && cart.length > 0){
+          navigate("/cart")
+        }else{
+          navigate("/products");
+        }
       })
     },
     onError: (error) => {
       console.log('Login Failed:', error)
     }
   });
-
-  // log out function to log the user out of google and set the profile array to null
-  const logOut = () => {
-    googleLogout();
-    // setProfile(null);
-  };
 
   const handleChangeEmail = (e) => {
     const email = e.target.value;
@@ -84,8 +84,11 @@ export default function SignIn() {
         dispatch(setTokenId(data.token));
         dispatch(setSignedInUser(data.account));
         dispatch(setLayout("dashboard"));
-
-        navigate("/products");
+        if(cart && cart.length > 0){
+          navigate("/cart")
+        }else{
+          navigate("/products");
+        }
       } else {
         if (r && r.status !== 200) {
           if (r.data) {

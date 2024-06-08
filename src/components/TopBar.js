@@ -21,12 +21,16 @@ import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import Grid from '@mui/material/Grid';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectCart } from '../redux/cart/cart.selector';
 import { useNavigate } from 'react-router-dom';
+import { categoryAPI } from '../services/categoryAPI';
+import { selectCategories, selectCategory } from '../redux/category/category.selector';
+import { setCategories, setCategory } from '../redux/category/category.slice';
+import NavMenu from './NavMenu';
+import { useTranslation } from 'react-i18next';
 
 const drawerWidth = 240;
-const navItems = ['Home', 'About', 'Contact'];
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -69,32 +73,36 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function DrawerAppBar(props) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const cart = useSelector(selectCart);
+  const categories = useSelector(selectCategories);
+  const category = useSelector(selectCategory)
+  React.useEffect(() => {
+    categoryAPI.fetchCategories().then(r => {
+      dispatch(setCategories(r.data));
+      if (!category) {
+        dispatch(setCategory(r.data[0]));
+      }
+    });
+  }, [])
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
-  const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        Logo
-      </Typography>
-      <Divider />
-      <List>
-        {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
+  const handleCart = () => {
+    navigate("/cart")
+  }
+
+  const handleCategory = (c) => {
+    dispatch(setCategory(c))
+    navigate("/products")
+  }
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
@@ -103,48 +111,62 @@ function DrawerAppBar(props) {
       <CssBaseline />
       <AppBar component="nav" elevation={0}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-            MyShop
-          </Typography>
-          <Grid container sx={{ flexGrow: 1 }} display="flex" justifyContent="flex-end">
-            <Grid item xs={12} sm={8} lg={4} py={1} pr={1}>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-              />
-            </Search>
+          <Grid container>
+            <Grid item xs={12} display="flex">
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: { sm: 'none' } }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+              >
+                MyShop
+              </Typography>
+              <Grid container sx={{ flexGrow: 1 }} display="flex" justifyContent="flex-end">
+                <Grid item xs={12} sm={8} lg={4} pt={1} pr={1}>
+                  <Search>
+                    <SearchIconWrapper>
+                      <SearchIcon />
+                    </SearchIconWrapper>
+                    <StyledInputBase
+                      placeholder="Search…"
+                      inputProps={{ 'aria-label': 'search' }}
+                    />
+                  </Search>
+                </Grid>
+              </Grid>
+              <Box style={{width: 36, paddingTop:16}}>
+                <Badge badgeContent={cart ? cart.reduce((sum, it) => sum + it.quantity, 0) : 0} color="secondary" onClick={handleCart}>
+                  <ShoppingCartIcon color="action" />
+                </Badge>
+              </Box>
             </Grid>
-            <Grid item xs={12} sm={8} lg={4} pt={0.5}>
-              Alchol
+            <Grid item xs={12}>
+              <Grid item xs={12} sm={8} lg={4} pt={0} pb={0.2}>
+                {
+                  categories && categories.length > 0 &&
+                  categories.map(c =>
+                    <Button
+                      size="small"
+                      variant="text"
+                      key={c.name}
+                      style={{ color: "white", borderRadius: 0, borderBottom: c._id == category._id ? "1px solid white" : "none" }}
+                      onClick={() => handleCategory(c)}
+                    >
+                      {t(c.name)}
+                    </Button>
+                  )
+                }
+              </Grid>
             </Grid>
           </Grid>
-          <Box sx={{ display: { xs: 'block' } }}>
-            {/* {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
-              </Button>
-            ))} */}
-            <Badge badgeContent={cart.reduce((sum, it) => sum + it.quantity, 0)} color="secondary" onClick={() => navigate("/cart")}>
-              <ShoppingCartIcon color="action" />
-            </Badge>
-          </Box>
         </Toolbar>
       </AppBar>
       <nav>
@@ -161,7 +183,7 @@ function DrawerAppBar(props) {
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >
-          {drawer}
+          <NavMenu onToggle={handleDrawerToggle} />
         </Drawer>
       </nav>
       {/* <Box component="main" sx={{ p: 3 }}>
