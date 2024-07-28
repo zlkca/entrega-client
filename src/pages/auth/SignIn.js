@@ -21,7 +21,7 @@ import { setLayout } from "../../redux/ui/ui.slice";
 import { authAPI } from '../../services/authAPI';
 import { accountAPI } from '../../services/accountAPI';
 import { ACCOUNT_COOKIE, JWT_COOKIE } from "../../const";
-import PageContainer from "../../components/PageContainer";
+import PageContainer from "../../layouts/PageContainer";
 import Button from "../../components/common/Button";
 import Input from "../../components/common/Input";
 import { BrandName } from "../../config";
@@ -47,7 +47,7 @@ export default function SignIn() {
         Cookies.set(ACCOUNT_COOKIE, JSON.stringify(data.account));
         dispatch(setTokenId(data.token));
         dispatch(setSignedInUser(data.account));
-        navigate("/products")
+        navigate("/goals")
       })
     },
     onError: (error) => {
@@ -103,7 +103,7 @@ export default function SignIn() {
   return (
     <PageContainer>
       <Grid container display="flex" pt={2} px={2} spacing={2} justifyContent="center" alignItems={"center"} style={{ height: "100%" }}>
-        <Grid item xs={12} sm={10} md={10} lg={8} display="flex" justifyContent="center">
+        {/* <Grid item xs={12} sm={10} md={10} lg={8} display="flex" justifyContent="center">
           <Grid item xs={12} sm={8} md={8}>
             <Input
               type="email"
@@ -134,8 +134,8 @@ export default function SignIn() {
           <Grid item xs={12} sm={8} md={8}>
             <Divider>OR</Divider>
           </Grid>
-        </Grid>
-        <Grid item xs={12} sm={10} md={10} lg={8} display="flex" justifyContent="center">
+        </Grid> */}
+        <Grid item xs={12} sm={10} md={10} lg={8} display="flex" justifyContent="center" alignItems="center" sx={{height:800}}>
           <Grid item xs={12} sm={8} md={8}>
             <Button variant="outline" style={{ color: "#666", border: "1px solid #aaa" }} onClick={handleGoogleLogin} startIcon={<GoogleLogo width={32} />}>
               Google Login

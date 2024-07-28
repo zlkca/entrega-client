@@ -7,6 +7,8 @@ import cartReducer from '../redux/cart/cart.slice';
 import orderReducer from '../redux/order/order.slice';
 import authReducer from "../redux/auth/auth.slice";
 import uiReducer from "../redux/ui/ui.slice";
+import goalReducer from '../redux/goal/goal.slice';
+import taskReducer from '../redux/task/task.slice';
 
 export default configureStore({
     reducer: {
@@ -16,7 +18,9 @@ export default configureStore({
         category: categoryReducer,
         cart: cartReducer,
         order: orderReducer,
-        ui: uiReducer
+        ui: uiReducer,
+        goal: goalReducer,
+        task: taskReducer,
     },
 })    
     

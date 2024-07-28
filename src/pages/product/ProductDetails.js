@@ -15,7 +15,7 @@ import { setProduct } from "../../redux/product/product.slice";
 import { setSnackbar } from "../../redux/ui/ui.slice";
 
 import { productAPI } from "../../services/productAPI";
-import PageContainer from "../../components/PageContainer";
+import PageContainer from "../../layouts/PageContainer";
 import HorizontalImageViewer from "../../components/HorizontalImageViewer";
 import { getDiscount } from "../utils";
 

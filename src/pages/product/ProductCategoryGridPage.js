@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 import { categoryAPI } from "../../services/categoryAPI";
 import ProductCategoryGrid from "../../components/product/ProductCategoryGrid";
-import PageContainer from "../../components/PageContainer";
-import TopBar from "../../components/TopBar";
+import PageContainer from "../../layouts/PageContainer";
+import TopBar from "../../layouts/TopBar";
 import { selectCart } from "../../redux/cart/cart.selector";
 
 
@@ -32,9 +32,7 @@ export default function ProductCategoryGridPage() {
 
     return (
       <div>
-        <TopBar />
         <PageContainer>
-            {/* <TopBar /> */}
             <ProductCategoryGrid categoryMap={catMap} />
         </PageContainer>
       </div>

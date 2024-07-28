@@ -1,16 +1,18 @@
 import Grid from "@mui/material/Grid";
+import TopBar from "./TopBar";
 
-export default function PageContainer({ children }) {
+export default function HomeContainer({ children }) {
     return (
         <Grid
             container
-            pt={12}
+            // pt={0}
             display="flex"
             justifyContent="center"
             alignItems="center"
             style={{ backgroundColor: "white", height: "100%" }}
         >
-            <Grid item xs={12} md={8}>
+            <TopBar />
+            <Grid item xs={12} md={12}>
                 {children}
             </Grid>
         </Grid>

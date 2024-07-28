@@ -1,6 +1,9 @@
-export const BrandName = "demo"; // demo
+export const BrandName = "podtree"; // demo
 
 export const CfgMap = {
+  podtree: {
+    apiClusterId: "ctri2lnfr5",
+  },
   demo: {
     apiClusterId: "ibi2llw781",
   },

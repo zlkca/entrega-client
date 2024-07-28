@@ -11,6 +11,11 @@ import SignIn from "../pages/auth/SignIn";
 import ProductDetails from "../pages/product/ProductDetails";
 import ProductCategroyGridPages from "../pages/product/ProductCategoryGridPage";
 import CartFormPage from "../pages/cart/CartForm";
+import Home from "../pages/Home";
+import GoalListPage from "../pages/goal/GoalList";
+import GoalFormPage from "../pages/goal/GoalForm";
+import TaskListPage from "../pages/task/TaskList";
+import TaskFormPage from "../pages/task/TaskForm";
 
 export const Router = createBrowserRouter([
   
@@ -49,18 +54,32 @@ export const Router = createBrowserRouter([
                         element: <CartFormPage />,
                     },
                 
-                    // {
-                    //     path: "orders",
-                    //     element: <OrderList />,
-                    // },
+                    {
+                        path: "goals",
+                        element: <GoalListPage />,
+                    },
                 
-                    // {
-                    //     path: "orders/:id/form",
-                    //     element: <OrderForm />,
-                    // },
+                    {
+                        path: "goals/:id/form",
+                        element: <GoalFormPage />,
+                    },
+                
+                    {
+                        path: "tasks",
+                        element: <TaskListPage />,
+                    },
+                
+                    {
+                        path: "tasks/:id/form",
+                        element: <TaskFormPage />,
+                    },
+                    {
+                        path: "/signin",
+                        element: <SignIn />,
+                    },
                     {
                         path: "/",
-                        element: <SignIn />,
+                        element: <Home />,
                     },
 ]);
     
