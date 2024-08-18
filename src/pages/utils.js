@@ -14,3 +14,19 @@ export const getDiscount = (discountStr, price) => {
         return 0;
     }
 }
+
+export const getDate = (s) => {
+    return s.split('T')[0];
+}
+export const getTime = (s) => {
+    return s.split('T')[1];
+}
+export const getDisplayTime = (s1) => {
+    const s = new Date(s1).toISOString();
+    const t = getTime(s);
+    return getDate(s) + " " + t.split('.')[0];
+}
+export function getUnixTime(date){
+    const unixTimestamp = date.getTime();
+    return unixTimestamp;
+}

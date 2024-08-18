@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Router } from "./routes";
+import React from "react";
 import { RouterProvider } from "react-router-dom";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "./App.css";
-// import axios from 'axios';
-// const axios = require('axios');
+import { Router } from "./routes";
+
 function App() {
   return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <RouterProvider router={Router} />
-  )
+    </LocalizationProvider>
+  );
 }
 export default App;

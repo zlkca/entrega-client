@@ -1,5 +1,5 @@
 
-import {get, post, put, del} from './http';
+import {get, post, del, patch} from './http';
 import { buildApiUrl } from './utils';
 
 export const goalAPI = {
@@ -20,7 +20,7 @@ export const goalAPI = {
 
     updateGoal: async (queryString, data) => {
         const url = buildApiUrl('/goals', queryString);
-        return await put(url, data);
+        return await patch(url, data);
     },
 
     deleteGoal: async (queryString) => {

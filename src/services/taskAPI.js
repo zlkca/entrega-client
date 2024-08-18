@@ -1,5 +1,5 @@
 
-import {get, post, put, del} from './http';
+import {get, post, patch, del} from './http';
 import { buildApiUrl } from './utils';
 
 export const taskAPI = {
@@ -20,7 +20,7 @@ export const taskAPI = {
 
     updateTask: async (queryString, data) => {
         const url = buildApiUrl('/tasks', queryString);
-        return await put(url, data);
+        return await patch(url, data);
     },
 
     deleteTask: async (queryString) => {

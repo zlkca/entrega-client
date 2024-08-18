@@ -1,37 +1,38 @@
 
 import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { useGridApiRef } from "@mui/x-data-grid";
-import { Box, Button, Grid, Card } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 
 import { setGoal } from "../../redux/goal/goal.slice";
 import { selectGoals } from "../../redux/goal/goal.selector";
 import { setGoals } from "../../redux/goal/goal.slice";
-import { setSignedInUser } from "../../redux/auth/auth.slice";
-import { setSnackbar } from "../../redux/ui/ui.slice";
-import { selectSnackbar } from "../../redux/ui/ui.selector";
-import { selectSignedInUser } from "../../redux/auth/auth.selector";
-
 import Footer from "../../layouts/Footer";
 
 import { goalAPI } from "../../services/goalAPI";
 import PageContainer from "../../layouts/PageContainer";
-import GridTable from "../../components/common/GridTable";
+import AlertDialog from "../../components/common/AlertDialog";
+import { USERID_SESSION } from "../../const";
 
-const GridCfg = { RowsPerPage: 20 };
-
+const styles = {
+    row: {
+        padding: "20px",
+        borderBottom: "1px solid #666",
+    }
+};
 export default function GoalListPage() {
+    const userId = sessionStorage.getItem(USERID_SESSION);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const gridApiRef = useGridApiRef();
     
     const goals = useSelector(selectGoals);
-    const signedInUser = useSelector(selectSignedInUser);
+    // const signedInUser = useSelector(selectSignedInUser);
     const [selectedRow, setSelectedRow] = useState();
-    const snackbar = useSelector(selectSnackbar);
+    const [delDialogOpen, setDelDialogOpen] = useState(false);
+    // const snackbar = useSelector(selectSnackbar);
 
     const columns = [
         { headerName: t("Name"), field: "name", minWidth: 200, flex: 1 },
@@ -67,29 +68,76 @@ export default function GoalListPage() {
         navigate("/goals/new/form");
     };
 
-    const handleSelectRow = (row) => {
-        setSelectedRow(row);
+    // const handleSelectRow = (row) => {
+    //     setSelectedRow(row);
+    // };
+
+    useEffect(()=> {
+        if(userId){
+            goalAPI.fetchGoals().then(r => {
+                console.log(r)
+                if(r && r.data && r.data.length > 0){
+                    dispatch(setGoals(r.data));
+                }
+                // else{
+                //     navigate("/goals/new/form");
+                // }
+            })
+        }else{
+            navigate("/signin");
+        }
+    }, [userId, dispatch]);
+    
+    // useEffect(() => {
+    //     if (signedInUser) {
+    //       goalAPI.searchGoals({}).then((r) => {
+    //         if (r.status == 200) {
+    //           dispatch(setGoals(r.data));
+    //         } else if (r.status === 401) {
+    //           dispatch(setSignedInUser());
+    //         }
+    //       });
+    //     }
+    // }, [signedInUser]);
+    const handleEdit = (row) => {
+        dispatch(setGoal(row));
+        const id = `${row.userId}-${row.createdAt}`;
+        navigate("/goals/" + id + "/form");
     };
 
-    useEffect(() => {
-        if (signedInUser) {
-          goalAPI.searchGoals({}).then((r) => {
-            if (r.status == 200) {
-              dispatch(setGoals(r.data));
-            } else if (r.status === 401) {
-              dispatch(setSignedInUser());
-            }
+    const handleDelete = (it) => {
+        setSelectedRow(it);
+        setDelDialogOpen(true);
+    };
+
+    const handleDeleteConfirm = () => {
+        setDelDialogOpen(false);
+        const id = `${selectedRow.userId}-${selectedRow.createdAt}`;
+        goalAPI.deleteGoal(id).then((r) => {
+            console.log(r);
+            dispatch(setGoals(goals.filter(it => !(it.userId === selectedRow.userId && it.createdAt === selectedRow.createdAt))));
+            // if (r.status === 200) {
+            //   dispatch(
+            //     setSnackbar({
+            //       color: "success",
+            //       icon: "check",
+            //       title: "",
+            //       content: t("Updated Successfully!"),
+            //       open: true,
+            //     })
+            //   );
+            //   navigate("/tasks");
+            // }
           });
-        }
-    }, [signedInUser]);
+    };
 
     return (
         <PageContainer>
             <Box pt={1} pb={3}>
             <Grid container spacing={6}>
                 <Grid item xs={12}>
-                <Card>
                     {/* <CardHead title={t("Goals")} /> */}
+                    {userId ?
                     <Box pt={2} px={2} style={{ height: 1240 }}>
                         <Grid container display="flex" justifyContent={"flex-start"}>
                             <Grid item xs={2} md={9}>
@@ -102,8 +150,8 @@ export default function GoalListPage() {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Box pt={0} px={0} style={{ height: 1000, marginTop: 20 }}>
-                            <GridTable
+                        <Box pt={0} px={0} style={{ height: 1000, marginTop: 20, borderTop: '1px solid #666' }}>
+                            {/* <GridTable
                                 autoPageSize
                                 apiRef={gridApiRef}
                                 data={goals}
@@ -111,13 +159,38 @@ export default function GoalListPage() {
                                 onRowClick={handleSelectRow}
                                 rowsPerPage={GridCfg.RowsPerPage}
                                 sortModel={[{ field: "created", sort: "desc" }]}
-                            />
+                            /> */}
+                            {
+                                goals.map(it => {
+                                    return (
+                                    <Grid style={styles.row} key={it.name} container display="flex" justifyContent="flex-start">
+                                        <Grid item xs={2} md={4}>{it.name}</Grid>
+                                        <Grid item xs={2} md={2} onClick={() => handleEdit(it)}>Edit</Grid>
+                                        <Grid item xs={2} md={2} onClick={() => handleDelete(it)}>Delete</Grid>
+                                    </Grid>
+                                    )
+                                })
+                            }
                         </Box>
                     </Box>
-                </Card>
+                    :
+                    <Box pt={2} px={2} style={{ height: 1240 }}>
+                        Please <Link to={'/signin'}>login</Link> to create your goals
+                    </Box>
+                    }
                 </Grid>
             </Grid>
             </Box>
+            {
+                delDialogOpen &&
+                <AlertDialog
+                    title="Delete Goal"
+                    description={`Are you sure to delete the goal ${selectedRow.name}`}
+                    open={delDialogOpen} 
+                    onCancel={() => setDelDialogOpen(false)}
+                    onOk={handleDeleteConfirm}
+                />
+            }
             {/* <MDSnackbar
             {...snackbar}
             title=""

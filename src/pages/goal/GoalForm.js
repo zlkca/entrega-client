@@ -6,9 +6,6 @@ import {
   Box,
   Button,
   Card,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
   Grid,
 } from "@mui/material";
 
@@ -150,16 +147,16 @@ export default function GoalFormPage() {
   const handleSubmit = () => {
     const d = {
       ...data,
-      creator: {
-        _id: signedInUser._id,
-        username: signedInUser.username,
-      },
+    //   creator: {
+    //     _id: signedInUser._id,
+    //     username: signedInUser.username,
+    //   },
     };
 
-    if (!validate(d)) return;
-
-    if (d._id) {
-      goalAPI.updateGoal(d._id, d).then((r) => {
+    // if (!validate(d)) return;
+    if (d.createdAt) {
+      const id = `${d.userId}-${d.createdAt}`;
+      goalAPI.updateGoal(id, d).then((r) => {
         if (r.status === 200) {
           dispatch(setGoal(r.data));
           dispatch(

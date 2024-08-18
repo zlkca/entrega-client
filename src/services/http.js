@@ -1,15 +1,17 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { JWT_COOKIE } from "../const";
+import { JWT_COOKIE, USERID_SESSION } from "../const";
 
 const REQ_TIMEOUT = 1000 * 80; // 80 seconds
 
 export const get = async (url) => {
   const token = Cookies.get(JWT_COOKIE);
+  const userId = sessionStorage.getItem(USERID_SESSION);
   const config = {
     timeout: REQ_TIMEOUT,
     headers: {
       Authorization: token,
+      UserId: userId,
     },
   };
   try {
@@ -30,10 +32,12 @@ export const get = async (url) => {
 
 export const post = async (url, data) => {
   const token = Cookies.get(JWT_COOKIE);
+  const userId = sessionStorage.getItem("podtree-user-id");
   const config = {
     timeout: REQ_TIMEOUT,
     headers: {
       Authorization: token,
+      UserId: userId,
     },
   };
   try {
@@ -54,10 +58,12 @@ export const post = async (url, data) => {
 
 export const put = async (url, data) => {
   const token = Cookies.get(JWT_COOKIE);
+  const userId = sessionStorage.getItem("podtree-user-id");
   const config = {
     timeout: REQ_TIMEOUT,
     headers: {
       Authorization: token,
+      UserId: userId,
     },
   };
   try {
@@ -75,13 +81,39 @@ export const put = async (url, data) => {
     }
   }
 };
-
-export const del = async (url) => {
+export const patch = async (url, data) => {
   const token = Cookies.get(JWT_COOKIE);
+  const userId = sessionStorage.getItem("podtree-user-id");
   const config = {
     timeout: REQ_TIMEOUT,
     headers: {
       Authorization: token,
+      UserId: userId,
+    },
+  };
+  try {
+    return await axios.patch(url, data, config);
+  } catch (e) {
+    if (e.code === "ECONNABORTED") {
+      // server no response, Service Unavailable
+      return { data: null, status: 503 };
+    } else if (e.code === "ERR_NETWORK") {
+      // host is down, Gatway Timeout
+      return { data: null, status: 504 };
+    } else {
+      const { data, status } = e.response;
+      return { data, status };
+    }
+  }
+};
+export const del = async (url) => {
+  const token = Cookies.get(JWT_COOKIE);
+  const userId = sessionStorage.getItem("podtree-user-id");
+  const config = {
+    timeout: REQ_TIMEOUT,
+    headers: {
+      Authorization: token,
+      UserId: userId,
     },
   };
   try {

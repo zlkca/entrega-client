@@ -20,12 +20,15 @@ import { setSignedInUser } from "../../redux/auth/auth.slice";
 import { setLayout } from "../../redux/ui/ui.slice";
 import { authAPI } from '../../services/authAPI';
 import { accountAPI } from '../../services/accountAPI';
-import { ACCOUNT_COOKIE, JWT_COOKIE } from "../../const";
+import { ACCOUNT_COOKIE, JWT_COOKIE, OAUTH_TOKEN_COOKIE, USER_PICTURE_SESSION, USERID_SESSION } from "../../const";
 import PageContainer from "../../layouts/PageContainer";
 import Button from "../../components/common/Button";
 import Input from "../../components/common/Input";
 import { BrandName } from "../../config";
 import GoogleLogo from "../../components/GoogleLogo";
+import { goalAPI } from "../../services/goalAPI";
+import { setGoals } from "../../redux/goal/goal.slice";
+import { setTasks } from "../../redux/task/task.slice";
 
 export default function SignIn() {
   const { t } = useTranslation();
@@ -38,16 +41,24 @@ export default function SignIn() {
 
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: (rsp) => {
-      console.log(rsp)
+      Cookies.set(OAUTH_TOKEN_COOKIE, rsp.access_token);
       setUser(rsp)
       authAPI.getGoogleUserinfo(rsp.access_token).then(r => {
-        // console.log(r);
-        const data = r.data;
-        Cookies.set(JWT_COOKIE, data.token);
-        Cookies.set(ACCOUNT_COOKIE, JSON.stringify(data.account));
-        dispatch(setTokenId(data.token));
-        dispatch(setSignedInUser(data.account));
-        navigate("/goals")
+        const {email, name, picture} = r.data;
+        // 
+        Cookies.set(USERID_SESSION, r.data.sub);
+        // dispatch(setTokenId(data.token));
+        dispatch(setSignedInUser({
+          id: r.data.sub,
+          username: name, 
+          email,
+          picture,
+        }));
+        dispatch(setTasks([]));
+        dispatch(setGoals([]));
+        sessionStorage.setItem(USERID_SESSION, r.data.sub);
+        sessionStorage.setItem(USER_PICTURE_SESSION, picture);
+        navigate("/goals");
       })
     },
     onError: (error) => {
