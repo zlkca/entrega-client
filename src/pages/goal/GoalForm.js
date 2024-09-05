@@ -18,8 +18,12 @@ import CardHeader from "../../components/common/CardHeader";
 import PageContainer from "../../layouts/PageContainer";
 import Typography from "../../components/common/Typography";
 import Input from "../../components/common/Input";
+import Selection from "../../components/common/Selection";
+
 import Footer from "../../layouts/Footer";
 import { goalAPI } from "../../services/goalAPI";
+import { categoryAPI } from "../../services/categoryAPI";
+import { setCategories } from "../../redux/category/category.slice";
 
 export default function GoalFormPage() {
   const { t } = useTranslation();
@@ -29,9 +33,17 @@ export default function GoalFormPage() {
 
   const [error, setError] = useState({});
   const [data, setData] = useState();
+  const [catOptions, setCatOptions] = useState([]);
 
   const signedInUser = useSelector(selectSignedInUser);
   const goal = useSelector(selectGoal);
+  
+  useEffect(() => {
+    categoryAPI.fetchCategories().then((r) => {
+      dispatch(setCategories(r.data));
+      setCatOptions(r.data.map((it) => ({ id: it.name, label: it.name })));
+    });
+  }, []);
 
   useEffect(() => {
     if (goal) {
@@ -66,13 +78,13 @@ export default function GoalFormPage() {
       return false;
     }
 
-    if (!d.planStartAt) {
-      alert(t("PlanStartAt is required"));
+    if (!d.startAt) {
+      alert(t("startAt is required"));
       return false;
     }
 
-    if (!d.planEndAt) {
-      alert(t("PlanEndAt is required"));
+    if (!d.endAt) {
+      alert(t("endAt is required"));
       return false;
     }
 
@@ -81,7 +93,7 @@ export default function GoalFormPage() {
       return false;
     }
 
-    if (!d.endAt) {
+    if (!d.endedAt) {
       alert(t("EndAt is required"));
       return false;
     }
@@ -115,12 +127,12 @@ export default function GoalFormPage() {
   };
 
   const handlePlanStartAtChange = (event) => {
-    const a = { ...data, planStartAt: event.target.value };
+    const a = { ...data, startAt: event.target.value };
     setData(a);
   };
 
   const handlePlanEndAtChange = (event) => {
-    const a = { ...data, planEndAt: event.target.value };
+    const a = { ...data, endAt: event.target.value };
     setData(a);
   };
 
@@ -130,7 +142,7 @@ export default function GoalFormPage() {
   };
 
   const handleEndAtChange = (event) => {
-    const a = { ...data, endAt: event.target.value };
+    const a = { ...data, endedAt: event.target.value };
     setData(a);
   };
 
@@ -141,6 +153,11 @@ export default function GoalFormPage() {
 
   const handleUpdatedAtChange = (event) => {
     const a = { ...data, updatedAt: event.target.value };
+    setData(a);
+  };
+  
+  const handleCategoryChange = (event) => {
+    const a = { ...data, category: event.target.value };
     setData(a);
   };
 
@@ -175,6 +192,7 @@ export default function GoalFormPage() {
       goalAPI
         .createGoal({
           ...d,
+          createdAt: new Date().getTime()
         })
         .then((r) => {
           if (r.status === 200) {
@@ -214,9 +232,19 @@ export default function GoalFormPage() {
                   ></Typography>
                 </Grid>
               </Grid>
-
               <Grid container xs={12} display="flex" p={2} spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={8}>
+                  <Selection
+                      name="category"
+                      label={t("Category")}
+                      value={data && data.category ? data.category : ""} // controlled
+                      options={catOptions}
+                      onChange={handleCategoryChange}
+                    />
+                  </Grid>
+              </Grid>
+              <Grid container xs={12} display="flex" p={2} spacing={2}>
+                <Grid item xs={12} sm={8}>
                   <Input
                     label={t("name")}
                     value={data && data.name ? data.name : ""}
@@ -227,7 +255,7 @@ export default function GoalFormPage() {
               </Grid>
 
               <Grid container xs={12} display="flex" p={2} spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={8}>
                   <Input
                     label={t("notes")}
                     value={data && data.notes ? data.notes : ""}
@@ -255,9 +283,9 @@ export default function GoalFormPage() {
                 <Grid item xs={6} sm={3}>
                     <Input
                         label={t("planStartAt")}
-                        value={data && data.planStartAt ? data.planStartAt : ""}
+                        value={data && data.startAt ? data.startAt : ""}
                         onChange={handlePlanStartAtChange}
-                        helperText={error && error.planStartAt ? error.planStartAt : ""}
+                        helperText={error && error.startAt ? error.startAt : ""}
                     />
                 </Grid>
             </Grid>
@@ -265,10 +293,10 @@ export default function GoalFormPage() {
             <Grid container xs={12} display="flex" pt={2} spacing={2}>
                 <Grid item xs={6} sm={3}>
                     <Input
-                        label={t("planEndAt")}
-                        value={data && data.planEndAt ? data.planEndAt : ""}
+                        label={t("endAt")}
+                        value={data && data.endAt ? data.endAt : ""}
                         onChange={handlePlanEndAtChange}
-                        helperText={error && error.planEndAt ? error.planEndAt : ""}
+                        helperText={error && error.endAt ? error.endAt : ""}
                     />
                 </Grid>
             </Grid>
@@ -287,10 +315,10 @@ export default function GoalFormPage() {
             <Grid container xs={12} display="flex" pt={2} spacing={2}>
                 <Grid item xs={6} sm={3}>
                     <Input
-                        label={t("endAt")}
-                        value={data && data.endAt ? data.endAt : ""}
+                        label={t("endedAt")}
+                        value={data && data.endedAt ? data.endedAt : ""}
                         onChange={handleEndAtChange}
-                        helperText={error && error.endAt ? error.endAt : ""}
+                        helperText={error && error.endedAt ? error.endedAt : ""}
                     />
                 </Grid>
             </Grid>

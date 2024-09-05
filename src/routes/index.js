@@ -7,6 +7,8 @@ import GoalListPage from "../pages/goal/GoalList";
 import GoalFormPage from "../pages/goal/GoalForm";
 import TaskListPage from "../pages/task/TaskList";
 import TaskFormPage from "../pages/task/TaskForm";
+import CategoryListPage from "../pages/category/CategoryList";
+import AnalyticsPage from "../pages/analytics";
 
 export const Router = createBrowserRouter([
   {
@@ -23,10 +25,21 @@ export const Router = createBrowserRouter([
     path: "/tasks",
     element: <TaskListPage />,
   },
-
   {
     path: "/tasks/:id/form",
     element: <TaskFormPage />,
+  },
+  {
+    path: "/categories",
+    element: <CategoryListPage />,
+  },
+  // {
+  //   path: "/categories/:categoryId/goals",
+  //   element: <GoalListPage />,
+  // },
+  {
+    path: "/analytics",
+    element: <AnalyticsPage />,
   },
   {
     path: "/signin",

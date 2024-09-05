@@ -19,16 +19,16 @@ import { setTokenId } from "../../redux/auth/auth.slice";
 import { setSignedInUser } from "../../redux/auth/auth.slice";
 import { setLayout } from "../../redux/ui/ui.slice";
 import { authAPI } from '../../services/authAPI';
-import { accountAPI } from '../../services/accountAPI';
-import { ACCOUNT_COOKIE, JWT_COOKIE, OAUTH_TOKEN_COOKIE, USER_PICTURE_SESSION, USERID_SESSION } from "../../const";
+// import { accountAPI } from '../../services/accountAPI';
+import { ACCOUNT_COOKIE, JWT_COOKIE, OAUTH_TOKEN_COOKIE, USER_PICTURE_COOKIE, USERID_COOKIE } from "../../const";
 import PageContainer from "../../layouts/PageContainer";
 import Button from "../../components/common/Button";
-import Input from "../../components/common/Input";
 import { BrandName } from "../../config";
 import GoogleLogo from "../../components/GoogleLogo";
-import { goalAPI } from "../../services/goalAPI";
 import { setGoals } from "../../redux/goal/goal.slice";
 import { setTasks } from "../../redux/task/task.slice";
+// import { setWeek } from "../../redux/ui/ui.slice";
+// import { getFirstDateOfWeek, getLastDateOfWeek } from "../utils";
 
 export default function SignIn() {
   const { t } = useTranslation();
@@ -46,7 +46,7 @@ export default function SignIn() {
       authAPI.getGoogleUserinfo(rsp.access_token).then(r => {
         const {email, name, picture} = r.data;
         // 
-        Cookies.set(USERID_SESSION, r.data.sub);
+        Cookies.set(USERID_COOKIE, r.data.sub);
         // dispatch(setTokenId(data.token));
         dispatch(setSignedInUser({
           id: r.data.sub,
@@ -56,8 +56,8 @@ export default function SignIn() {
         }));
         dispatch(setTasks([]));
         dispatch(setGoals([]));
-        sessionStorage.setItem(USERID_SESSION, r.data.sub);
-        sessionStorage.setItem(USER_PICTURE_SESSION, picture);
+        localStorage.setItem(USERID_COOKIE, r.data.sub);
+        localStorage.setItem(USER_PICTURE_COOKIE, picture);
         navigate("/goals");
       })
     },

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -14,144 +13,140 @@ import Footer from "../../layouts/Footer";
 import { goalAPI } from "../../services/goalAPI";
 import PageContainer from "../../layouts/PageContainer";
 import AlertDialog from "../../components/common/AlertDialog";
-import { USERID_SESSION } from "../../const";
+import { USERID_COOKIE } from "../../const";
+import {
+  DeleteIconButton,
+  EditIconButton,
+} from "../../components/common/IconButton";
 
 const styles = {
-    row: {
-        padding: "20px",
-        borderBottom: "1px solid #666",
-    }
+  row: {
+    padding: "20px",
+    borderBottom: "1px solid #666",
+  },
 };
 export default function GoalListPage() {
-    const userId = sessionStorage.getItem(USERID_SESSION);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const { t } = useTranslation();
-    
-    const goals = useSelector(selectGoals);
-    // const signedInUser = useSelector(selectSignedInUser);
-    const [selectedRow, setSelectedRow] = useState();
-    const [delDialogOpen, setDelDialogOpen] = useState(false);
-    // const snackbar = useSelector(selectSnackbar);
+  const userId = localStorage.getItem(USERID_COOKIE);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  // const {categoryId} = useParams();
 
-    const columns = [
-        { headerName: t("Name"), field: "name", minWidth: 200, flex: 1 },
-        { headerName: t("Notes"), field: "notes", minWidth: 200, flex: 1 },
-        { headerName: t("Status"), field: "status", minWidth: 200, flex: 1 },
-        { headerName: t("PlanStartAt"), field: "planStartAt", minWidth: 200, flex: 1 },
-        { headerName: t("PlanEndAt"), field: "planEndAt", minWidth: 200, flex: 1 },
-        { headerName: t("StartAt"), field: "startAt", minWidth: 200, flex: 1 },
-        { headerName: t("EndAt"), field: "endAt", minWidth: 200, flex: 1 },
-        { headerName: t("CreatedAt"), field: "createdAt", minWidth: 200, flex: 1 },
-        { headerName: t("UpdatedAt"), field: "updatedAt", minWidth: 200, flex: 1 },
-        // { headerName: t("Actions"),
-        //     field: "_id",
-        //     minWidth: 180,
-        //     renderCell: (params) => {
-        //         return (
-        //         <CellButton
-        //             onClick={() => {
-        //             dispatch(setGoal(params.row));
-        //             const goalId = params.row._id;
-        //             navigate("/goals/" + goalId);
-        //             }}
-        //         >
-        //             {t("View Details")}
-        //         </CellButton>
-        //         );
-        //     },
-        // }
-    ];
+  const goals = useSelector(selectGoals);
+  // const signedInUser = useSelector(selectSignedInUser);
+  const [selectedRow, setSelectedRow] = useState();
+  const [delDialogOpen, setDelDialogOpen] = useState(false);
+  // const snackbar = useSelector(selectSnackbar);
 
-    const handleCreate = () => {
-        dispatch(setGoal());
-        navigate("/goals/new/form");
-    };
+  const handleCreate = () => {
+    dispatch(setGoal());
+    navigate("/goals/new/form");
+  };
 
-    // const handleSelectRow = (row) => {
-    //     setSelectedRow(row);
-    // };
+  // const handleSelectRow = (row) => {
+  //     setSelectedRow(row);
+  // };
 
-    useEffect(()=> {
-        if(userId){
-            goalAPI.fetchGoals().then(r => {
-                console.log(r)
-                if(r && r.data && r.data.length > 0){
-                    dispatch(setGoals(r.data));
-                }
-                // else{
-                //     navigate("/goals/new/form");
-                // }
-            })
-        }else{
-            navigate("/signin");
+  useEffect(() => {
+    if (userId) {
+      goalAPI.fetchGoals().then((r) => {
+        console.log(r);
+        if (r && r.data && r.data.length > 0) {
+          dispatch(setGoals(r.data));
         }
-    }, [userId, dispatch]);
-    
-    // useEffect(() => {
-    //     if (signedInUser) {
-    //       goalAPI.searchGoals({}).then((r) => {
-    //         if (r.status == 200) {
-    //           dispatch(setGoals(r.data));
-    //         } else if (r.status === 401) {
-    //           dispatch(setSignedInUser());
-    //         }
-    //       });
-    //     }
-    // }, [signedInUser]);
-    const handleEdit = (row) => {
-        dispatch(setGoal(row));
-        const id = `${row.userId}-${row.createdAt}`;
-        navigate("/goals/" + id + "/form");
-    };
+      });
+    } else {
+      navigate("/signin");
+    }
+  }, [userId, dispatch]);
 
-    const handleDelete = (it) => {
-        setSelectedRow(it);
-        setDelDialogOpen(true);
-    };
+  // useEffect(() => {
+  //     if (categoryId) {
+  //       goals.filter(it => it.category === categoryId)
+  //     }
+  // }, [categoryId]);
 
-    const handleDeleteConfirm = () => {
-        setDelDialogOpen(false);
-        const id = `${selectedRow.userId}-${selectedRow.createdAt}`;
-        goalAPI.deleteGoal(id).then((r) => {
-            console.log(r);
-            dispatch(setGoals(goals.filter(it => !(it.userId === selectedRow.userId && it.createdAt === selectedRow.createdAt))));
-            // if (r.status === 200) {
-            //   dispatch(
-            //     setSnackbar({
-            //       color: "success",
-            //       icon: "check",
-            //       title: "",
-            //       content: t("Updated Successfully!"),
-            //       open: true,
-            //     })
-            //   );
-            //   navigate("/tasks");
-            // }
-          });
-    };
+  const handleEdit = (row) => {
+    dispatch(setGoal(row));
+    const id = `${row.userId}-${row.createdAt}`;
+    navigate("/goals/" + id + "/form");
+  };
 
-    return (
-        <PageContainer>
-            <Box pt={1} pb={3}>
-            <Grid container spacing={6}>
-                <Grid item xs={12}>
-                    {/* <CardHead title={t("Goals")} /> */}
-                    {userId ?
-                    <Box pt={2} px={2} style={{ height: 1240 }}>
-                        <Grid container display="flex" justifyContent={"flex-start"}>
-                            <Grid item xs={2} md={9}>
-                                <Grid container spacing={2} direction="row" justifyContent="flex-end">
-                                    <Grid item>
-                                    <Button color="info" variant={"outlined"} size="small" onClick={handleCreate}>
-                                        {t("Create")}
-                                    </Button>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Box pt={0} px={0} style={{ height: 1000, marginTop: 20, borderTop: '1px solid #666' }}>
-                            {/* <GridTable
+  const handleDelete = (it) => {
+    setSelectedRow(it);
+    setDelDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    setDelDialogOpen(false);
+    const id = `${selectedRow.userId}-${selectedRow.createdAt}`;
+    goalAPI.deleteGoal(id).then((r) => {
+      console.log(r);
+      dispatch(
+        setGoals(
+          goals.filter(
+            (it) =>
+              !(
+                it.userId === selectedRow.userId &&
+                it.createdAt === selectedRow.createdAt
+              )
+          )
+        )
+      );
+      // if (r.status === 200) {
+      //   dispatch(
+      //     setSnackbar({
+      //       color: "success",
+      //       icon: "check",
+      //       title: "",
+      //       content: t("Updated Successfully!"),
+      //       open: true,
+      //     })
+      //   );
+      //   navigate("/tasks");
+      // }
+    });
+  };
+
+  return (
+    <PageContainer>
+      <Box pt={1} pb={3}>
+        <Grid container spacing={6}>
+          <Grid item xs={12}>
+            {/* <CardHead title={t("Goals")} /> */}
+            {userId ? (
+              <Box pt={2} px={2} style={{ height: 1240 }}>
+                <Grid container display="flex" justifyContent={"flex-start"}>
+                  <Grid item xs={2} md={9}>
+                    <Grid
+                      container
+                      spacing={2}
+                      direction="row"
+                      justifyContent="flex-end"
+                    >
+                      <Grid item>
+                        <Button
+                          color="info"
+                          variant={"outlined"}
+                          size="small"
+                          onClick={handleCreate}
+                        >
+                          {t("Create")}
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Box
+                  pt={0}
+                  px={0}
+                  style={{
+                    height: 1000,
+                    marginTop: 20,
+                    borderTop: "1px solid #666",
+                  }}
+                >
+                  {/* <GridTable
                                 autoPageSize
                                 apiRef={gridApiRef}
                                 data={goals}
@@ -160,38 +155,47 @@ export default function GoalListPage() {
                                 rowsPerPage={GridCfg.RowsPerPage}
                                 sortModel={[{ field: "created", sort: "desc" }]}
                             /> */}
-                            {
-                                goals.map(it => {
-                                    return (
-                                    <Grid style={styles.row} key={it.name} container display="flex" justifyContent="flex-start">
-                                        <Grid item xs={2} md={4}>{it.name}</Grid>
-                                        <Grid item xs={2} md={2} onClick={() => handleEdit(it)}>Edit</Grid>
-                                        <Grid item xs={2} md={2} onClick={() => handleDelete(it)}>Delete</Grid>
-                                    </Grid>
-                                    )
-                                })
-                            }
-                        </Box>
-                    </Box>
-                    :
-                    <Box pt={2} px={2} style={{ height: 1240 }}>
-                        Please <Link to={'/signin'}>login</Link> to create your goals
-                    </Box>
-                    }
-                </Grid>
-            </Grid>
-            </Box>
-            {
-                delDialogOpen &&
-                <AlertDialog
-                    title="Delete Goal"
-                    description={`Are you sure to delete the goal ${selectedRow.name}`}
-                    open={delDialogOpen} 
-                    onCancel={() => setDelDialogOpen(false)}
-                    onOk={handleDeleteConfirm}
-                />
-            }
-            {/* <MDSnackbar
+                  {goals.map((it) => {
+                    return (
+                      <Grid
+                        style={styles.row}
+                        key={it.name}
+                        container
+                        display="flex"
+                        justifyContent="flex-start"
+                      >
+                        <Grid item xs={8} md={8}>
+                          {it.name}
+                        </Grid>
+                        <Grid item xs={2} md={2}>
+                          <EditIconButton onClick={() => handleEdit(it)} />
+                        </Grid>
+                        <Grid item xs={2} md={2}>
+                          <DeleteIconButton onClick={() => handleDelete(it)} />
+                        </Grid>
+                      </Grid>
+                    );
+                  })}
+                </Box>
+              </Box>
+            ) : (
+              <Box pt={2} px={2} style={{ height: 1240 }}>
+                Please <Link to={"/signin"}>login</Link> to create your goals
+              </Box>
+            )}
+          </Grid>
+        </Grid>
+      </Box>
+      {delDialogOpen && (
+        <AlertDialog
+          title="Delete Goal"
+          description={`Are you sure to delete the goal ${selectedRow.name}`}
+          open={delDialogOpen}
+          onCancel={() => setDelDialogOpen(false)}
+          onOk={handleDeleteConfirm}
+        />
+      )}
+      {/* <MDSnackbar
             {...snackbar}
             title=""
             datetime=""
@@ -200,7 +204,7 @@ export default function GoalListPage() {
             close={() => dispatch(setSnackbar({ ...snackbar, open: false }))}
             onClose={() => dispatch(setSnackbar({ ...snackbar, open: false }))}
             /> */}
-            <Footer />
-        </PageContainer>
-    );
+      <Footer />
+    </PageContainer>
+  );
 }

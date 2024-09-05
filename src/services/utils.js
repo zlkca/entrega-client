@@ -10,6 +10,7 @@ export const buildApiUrl = (path, params) => {
         return `${url}/${params}`;
     }
     if (typeof params === "object") { // path?q=x&py
+        console.log(params);
         return `${url}?${queryString.stringify(params)}`;
     }
     return url;  

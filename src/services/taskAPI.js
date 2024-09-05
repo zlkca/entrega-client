@@ -32,5 +32,9 @@ export const taskAPI = {
         const url = buildApiUrl('/search/tasks');
         return await post(url, query);
     },
+    analyseTasks: async () => {
+        const url = buildApiUrl('/analyse/tasks');
+        return await get(url, url);
+    }
 }
     

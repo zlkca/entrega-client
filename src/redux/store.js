@@ -21,6 +21,6 @@ export default configureStore({
         ui: uiReducer,
         goal: goalReducer,
         task: taskReducer,
-    },
+    }
 })    
     

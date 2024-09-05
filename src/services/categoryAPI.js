@@ -1,5 +1,5 @@
 
-import {get, post, put, del} from './http';
+import {get, post, patch, del} from './http';
 import { buildApiUrl } from './utils';
 
 export const categoryAPI = {
@@ -25,7 +25,7 @@ export const categoryAPI = {
 
     updateCategory: async (queryString, data) => {
         const url = buildApiUrl('/categories', queryString);
-        return await put(url, data);
+        return await patch(url, data);
     },
 
     deleteCategory: async (queryString) => {

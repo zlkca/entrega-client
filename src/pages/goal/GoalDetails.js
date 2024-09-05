@@ -116,9 +116,9 @@ export default function GoalDetails() {
             
             <VField label={t("Status")} value={data.status} />
             
-            <VField label={t("PlanStartAt")} value={data.planStartAt} />
+            <VField label={t("PlanStartAt")} value={data.startAt} />
             
-            <VField label={t("PlanEndAt")} value={data.planEndAt} />
+            <VField label={t("endAt")} value={data.endAt} />
             
             <VField label={t("StartAt")} value={data.startAt} />
             

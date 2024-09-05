@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 // import { uiThunkReducers } from './ui.thunk.js'
 
 export const initialUIState = {
@@ -7,12 +7,16 @@ export const initialUIState = {
   language: "en",
   snackbar: { title: "", content: "", datetime: "", open: false },
   dialog: { open: false },
+  week: { start: "", end: "", current: ""}
 };
 
 export const uiSlice = createSlice({
   name: "ui",
   initialState: initialUIState,
   reducers: {
+    setWeek: (state, action) => {
+      state.week = action.payload;
+    },
     setLanguage: (state, action) => {
       state.language = action.payload;
     },
@@ -37,6 +41,7 @@ export const {
   setLanguage,
   setSnackbar,
   setDialog,
+  setWeek,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

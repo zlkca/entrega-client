@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 import PageContainer from "../layouts/PageContainer";
 import HomeContainer from "../layouts/HomeContainer";
 import Cookies from "js-cookie";
-import { OAUTH_TOKEN_COOKIE, USERID_SESSION } from "../const";
+import { OAUTH_TOKEN_COOKIE, USERID_COOKIE } from "../const";
 import { authAPI } from "../services/authAPI";
 import { goalAPI } from "../services/goalAPI";
 import { addTask } from "../redux/task/task.slice";
@@ -33,7 +33,7 @@ console.log('Home page')
 
 export default function Home() {
   const dispatch = useDispatch();
-  const userId = Cookies.get(USERID_SESSION);
+  const userId = Cookies.get(USERID_COOKIE);
   const messages = useSelector(selectTasks);
   const navigate = useNavigate();
 

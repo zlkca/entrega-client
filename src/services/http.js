@@ -1,12 +1,12 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { JWT_COOKIE, USERID_SESSION } from "../const";
+import { JWT_COOKIE, USERID_COOKIE } from "../const";
 
 const REQ_TIMEOUT = 1000 * 80; // 80 seconds
 
 export const get = async (url) => {
   const token = Cookies.get(JWT_COOKIE);
-  const userId = sessionStorage.getItem(USERID_SESSION);
+  const userId = localStorage.getItem(USERID_COOKIE);
   const config = {
     timeout: REQ_TIMEOUT,
     headers: {
@@ -32,7 +32,7 @@ export const get = async (url) => {
 
 export const post = async (url, data) => {
   const token = Cookies.get(JWT_COOKIE);
-  const userId = sessionStorage.getItem("podtree-user-id");
+  const userId = localStorage.getItem(USERID_COOKIE);
   const config = {
     timeout: REQ_TIMEOUT,
     headers: {
@@ -58,7 +58,7 @@ export const post = async (url, data) => {
 
 export const put = async (url, data) => {
   const token = Cookies.get(JWT_COOKIE);
-  const userId = sessionStorage.getItem("podtree-user-id");
+  const userId = localStorage.getItem(USERID_COOKIE);
   const config = {
     timeout: REQ_TIMEOUT,
     headers: {
@@ -83,7 +83,7 @@ export const put = async (url, data) => {
 };
 export const patch = async (url, data) => {
   const token = Cookies.get(JWT_COOKIE);
-  const userId = sessionStorage.getItem("podtree-user-id");
+  const userId = localStorage.getItem(USERID_COOKIE);
   const config = {
     timeout: REQ_TIMEOUT,
     headers: {
@@ -108,7 +108,7 @@ export const patch = async (url, data) => {
 };
 export const del = async (url) => {
   const token = Cookies.get(JWT_COOKIE);
-  const userId = sessionStorage.getItem("podtree-user-id");
+  const userId = localStorage.getItem(USERID_COOKIE);
   const config = {
     timeout: REQ_TIMEOUT,
     headers: {
