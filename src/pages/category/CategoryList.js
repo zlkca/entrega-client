@@ -139,18 +139,11 @@ export default function CategoryListPage() {
                   style={{
                     height: 1000,
                     marginTop: 20,
-                    borderTop: "1px solid #666",
                   }}
                 >
-                  {/* <GridTable
-                                autoPageSize
-                                apiRef={gridApiRef}
-                                data={categories}
-                                columns={columns}
-                                onRowClick={handleSelectRow}
-                                rowsPerPage={GridCfg.RowsPerPage}
-                                sortModel={[{ field: "created", sort: "desc" }]}
-                            /> */}
+                  <Grid xs={12} pt={2} pb={4} style={{borderBottom: "1px solid #666",}}>
+                  We offer these 11 goals as examples; you can choose the ones that resonate with you. By focusing on them, you create a balanced and meaningful life. You build resilience, strengthen relationships, enhance well-being, and achieve a sense of accomplishment. Ultimately, these goals help you live a happier, more purposeful life, aligning your actions with your values and reaching your full potential.
+                  </Grid>
                   {categories.map((it) => {
                     return (
                       <Grid
@@ -160,8 +153,11 @@ export default function CategoryListPage() {
                         display="flex"
                         justifyContent="flex-start"
                       >
-                        <Grid item xs={8} md={8}>
+                        <Grid item xs={8} md={8} style={{fontSize: 24, fontWeight: "500"}}>
                           {it.name}
+                        </Grid>
+                        <Grid item xs={12} md={12} style={{color: '#666'}}>
+                          {it.notes}
                         </Grid>
                         {/* <Grid item xs={2} md={2}>
                           <EditIconButton onClick={() => handleEdit(it)} />

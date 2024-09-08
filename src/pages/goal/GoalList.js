@@ -124,7 +124,7 @@ export default function GoalListPage() {
                       direction="row"
                       justifyContent="flex-end"
                     >
-                      <Grid item>
+                      {/* <Grid item>
                         <Button
                           color="info"
                           variant={"outlined"}
@@ -133,7 +133,7 @@ export default function GoalListPage() {
                         >
                           {t("Create")}
                         </Button>
-                      </Grid>
+                      </Grid> */}
                     </Grid>
                   </Grid>
                 </Grid>
@@ -146,15 +146,23 @@ export default function GoalListPage() {
                     borderTop: "1px solid #666",
                   }}
                 >
-                  {/* <GridTable
-                                autoPageSize
-                                apiRef={gridApiRef}
-                                data={goals}
-                                columns={columns}
-                                onRowClick={handleSelectRow}
-                                rowsPerPage={GridCfg.RowsPerPage}
-                                sortModel={[{ field: "created", sort: "desc" }]}
-                            /> */}
+                  <Grid
+                    style={{...styles.row, fontWeight: "bold"}}
+                    key="table-header"
+                    container
+                    display="flex"
+                    justifyContent="flex-start"
+                  >
+                    <Grid item xs={6} md={6}>
+                      Goal
+                    </Grid>
+                    <Grid item xs={4} md={4}>
+                      Categories
+                    </Grid>
+                    {/* <Grid item xs={2} md={2}>
+                      Actions
+                    </Grid> */}
+                  </Grid>
                   {goals.map((it) => {
                     return (
                       <Grid
@@ -164,15 +172,18 @@ export default function GoalListPage() {
                         display="flex"
                         justifyContent="flex-start"
                       >
-                        <Grid item xs={8} md={8}>
+                        <Grid item xs={6} md={6} style={{fontSize: 24, fontWeight: "500", color: '#333'}}>
                           {it.name}
                         </Grid>
-                        <Grid item xs={2} md={2}>
+                        <Grid item xs={4} md={4} style={{color: '#666'}}>
+                          {it.categories.map((c) => c.name).join(", ")}
+                        </Grid>
+                        {/* <Grid item xs={1} md={1}>
                           <EditIconButton onClick={() => handleEdit(it)} />
                         </Grid>
-                        <Grid item xs={2} md={2}>
+                        <Grid item xs={1} md={1}>
                           <DeleteIconButton onClick={() => handleDelete(it)} />
-                        </Grid>
+                        </Grid> */}
                       </Grid>
                     );
                   })}

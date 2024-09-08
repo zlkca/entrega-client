@@ -32,11 +32,8 @@ export default function AnalyticsPage() {
   return (
     <PageContainer>
       <Box pt={1} pb={3}>
-        <Grid container spacing={6} style={{height: 800, width:600}} 
-          justify="flex-end"
-          alignItems="center"
-        >
-          <Grid item xs={12} py={5}>
+        <Grid container>
+          <Grid item xs={12} sx={{display: "flex", justifyContent: "center", alignItems: "center", height: '800px'}}>
             <PieChart
               series={[
                 {

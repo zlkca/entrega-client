@@ -238,7 +238,7 @@ export default function TaskFormPage() {
   const handleGoalChange = (event) => {
     const name = event.target.value;
     const goal = goals.find((it) => it.name === name);
-    const a = { ...data, goal: goal.name, category: goal.category };
+    const a = { ...data, goal: goal.name, categories: goal.categories };
     console.log(a);
     setData(a);
   };
