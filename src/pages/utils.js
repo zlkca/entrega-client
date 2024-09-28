@@ -68,9 +68,6 @@ export function getFirstDateOfWeek(date, startOfWeek = 0) {
 
   return startDate;
 }
-console.log(getFirstDateOfWeek(new Date(2024, 0, 0))); // Monday
-console.log(getFirstDateOfWeek(new Date(2024, 11, 30))); // Last Tuesday of 2024
-console.log(getFirstDateOfWeek(new Date())); // Invalid date error
 
 export function getLastDateOfWeek(date, startOfWeek = 0) {
   // startOfWeek: 0 = Sunday, 1 = Monday
@@ -99,6 +96,10 @@ export function getLastDateOfWeek(date, startOfWeek = 0) {
 console.log(getLastDateOfWeek(new Date(2024, 0, 1))); // Sunday, 2024-01-07
 console.log(getLastDateOfWeek(new Date(2024, 11, 30))); // Sunday, 2025-01-05
 console.log(getLastDateOfWeek(new Date())); // Invalid date error
+
+console.log(getFirstDateOfWeek(new Date(2024, 0, 0))); // Monday
+console.log(getFirstDateOfWeek(new Date(2024, 11, 30))); // Last Tuesday of 2024
+console.log(getFirstDateOfWeek(new Date())); // Invalid date error
 
 
 export function getTargetDate(currentDate, deltaDays) {

@@ -93,23 +93,9 @@ export default function TaskListPage() {
       ));
       const ts = tasksOnSelectedDate.filter((it) => it.startAt === selectedRow.startAt);
       setTasksOnSelectedDate(ts);
-      // if (r.status === 200) {
-      //   dispatch(
-      //     setSnackbar({
-      //       color: "success",
-      //       icon: "check",
-      //       title: "",
-      //       content: t("Updated Successfully!"),
-      //       open: true,
-      //     })
-      //   );
-      //   navigate("/tasks");
-      // }
     });
   };
-  // const handleSelectRow = (row) => {
-  //     setSelectedRow(row);
-  // };
+
   const handleComplete = (item, e) => {
     const id = `${item.userId}-${item.startAt}`;
     const d = {
@@ -231,16 +217,6 @@ export default function TaskListPage() {
                       direction="row"
                       justifyContent="flex-end"
                     >
-                      {/* <Grid item>
-                        <Button
-                          color="info"
-                          variant={"outlined"}
-                          size="small"
-                          onClick={() => setSelectedDay(new Date())}
-                        >
-                          {t("Today")}
-                        </Button>
-                      </Grid> */}
                       <Grid item>
                         <Button
                           key="create-task-button"
@@ -328,15 +304,6 @@ export default function TaskListPage() {
           </Grid>
         </Grid>
       </Box>
-      {/* <MDSnackbar
-            {...snackbar}
-            title=""
-            datetime=""
-            icon="check"
-            autoHideDuration={3000}
-            close={() => dispatch(setSnackbar({ ...snackbar, open: false }))}
-            onClose={() => dispatch(setSnackbar({ ...snackbar, open: false }))}
-            /> */}
       {delDialogOpen && (
         <AlertDialog
           title="Delete Task"
